@@ -1,31 +1,37 @@
 import os
 import json
 import re
+from langsmith import traceable
+
 
 class ReelScriptAgent:
     """
     Agentic Reel Script Builder.
-    Takes a topic and tone, reasons through the structure,
-    then calls Gemini to generate a hook/body/CTA script.
+    Uses LangChain + LangSmith for traced LLM calls.
     Falls back to a local generator when no API key is set.
     """
 
     def __init__(self):
         api_key = os.getenv("GEMINI_API_KEY")
-        self.client = None
+        self.llm = None
         if api_key and api_key != "your_gemini_api_key_here":
             try:
-                from google import genai
-                self.client = genai.Client(api_key=api_key)
+                from langchain_google_genai import ChatGoogleGenerativeAI
+                self.llm = ChatGoogleGenerativeAI(
+                    model="gemini-2.0-flash",
+                    google_api_key=api_key,
+                    temperature=0.7,
+                )
             except Exception:
-                self.client = None
+                self.llm = None
 
+    @traceable(name="generate_script", run_type="chain")
     def generate_script(self, topic, tone="engaging", duration="30-60"):
         """
         Run the agent loop:
         1. Analyze the request
         2. Plan the script structure
-        3. Call the LLM (or fallback)
+        3. Call the LLM via LangChain (traced by LangSmith)
         4. Parse and return structured output
         """
         thoughts = []
@@ -39,8 +45,8 @@ class ReelScriptAgent:
         thoughts.append(f"Selecting tone profile: {tone}")
 
         # Step 3 - Generate
-        if self.client:
-            thoughts.append("Calling Gemini model for generation...")
+        if self.llm:
+            thoughts.append("Calling Gemini via LangChain (traced by LangSmith)...")
             try:
                 result = self._call_llm(topic, tone, duration)
                 thoughts.append("LLM response received. Parsing structured output...")
@@ -55,6 +61,7 @@ class ReelScriptAgent:
             result = self._local_fallback(topic, tone)
             return {"agent": "reel_script_agent", "thoughts": thoughts, "result": result}
 
+    @traceable(name="call_gemini", run_type="llm")
     def _call_llm(self, topic, tone, duration):
         prompt = (
             f"You are a short-form video scriptwriter. "
@@ -66,11 +73,8 @@ class ReelScriptAgent:
             f'"cta" (a closing call to action, 5-10 seconds). '
             f"No markdown. No explanation. Just the JSON object."
         )
-        response = self.client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=prompt,
-        )
-        text = response.text.strip()
+        response = self.llm.invoke(prompt)
+        text = response.content.strip()
 
         # Try to extract JSON from the response
         match = re.search(r'\{.*\}', text, re.DOTALL)
@@ -78,6 +82,7 @@ class ReelScriptAgent:
             return json.loads(match.group(0))
         return json.loads(text)
 
+    @traceable(name="local_fallback", run_type="tool")
     def _local_fallback(self, topic, tone):
         hooks = {
             "engaging": f"Wait -- you have been doing {topic} wrong this entire time.",
