@@ -18,14 +18,14 @@ class ReelScriptAgent:
             try:
                 from langchain_google_genai import ChatGoogleGenerativeAI
                 self.llm = ChatGoogleGenerativeAI(
-                    model="gemini-2.0-flash",
+                    model="gemini-3.8-flash",
                     google_api_key=api_key,
                     temperature=0.7,
                 )
             except Exception:
                 self.llm = None
 
-    @traceable(name="generate_script", run_type="chain")
+    @traceable(name="reel-script-generation", run_type="chain", metadata={"content_type": "reel script"})
     def generate_script(self, topic, tone="engaging", duration="30-60"):
         """
         Run the agent loop:
