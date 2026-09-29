@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reel Script Builder AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --surface: #1e293b;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --success: #10b981;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-color);
+            color: var(--text-main);
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: var(--primary-hover);
+        }
+
+        button:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+            color: var(--text-muted);
+        }
+
+        .agent-thoughts {
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-family: monospace;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .thought-line {
+            margin-bottom: 0.3rem;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .thought-line::before {
+            content: "> ";
+            color: var(--primary);
+        }
+
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .result-section {
+            display: none;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .script-block {
+            background: var(--bg-color);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .script-block h3 {
+            position: absolute;
+            top: -12px;
+            left: 1.5rem;
+            background: var(--surface);
+            padding: 0 0.5rem;
+            color: var(--primary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .script-block.error {
+            border-color: #ef4444;
+        }
+        .script-block.error h3 {
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Reel Script Builder</h1>
+            <p class="subtitle">Turn any idea into a high-converting 60s short-form script</p>
+        </header>
+
+        <div class="card">
+            <form id="generateForm">
+                <div class="form-group">
+                    <label for="topic">What is your video about? (Topic/Idea)</label>
+                    <input type="text" id="topic" placeholder="e.g. 3 productivity hacks for software engineers" required autocomplete="off">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tone">Script Tone</label>
+                    <select id="tone">
+                        <option value="engaging">Engaging & Fast-paced</option>
+                        <option value="educational">Educational & Informative</option>
+                        <option value="storytelling">Storytelling & Emotional</option>
+                        <option value="funny">Funny & Entertaining</option>
+                        <option value="controversial">Controversial & Opinionated</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="submitBtn">Generate Script</button>
+            </form>
+        </div>
+
+        <div class="card" id="outputCard" style="display: none;">
+            <div class="agent-thoughts" id="agentThoughts"></div>
+            
+            <div class="result-section" id="resultSection">
+                <!-- Template blocks -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('generateForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const outputCard = document.getElementById('outputCard');
+        const agentThoughts = document.getElementById('agentThoughts');
+        const resultSection = document.getElementById('resultSection');
+        const topicInput = document.getElementById('topic');
+        const toneInput = document.getElementById('tone');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const topic = topicInput.value.trim();
+            const tone = toneInput.value;
+            
+            if(!topic) return;
+
+            // Reset UI
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Agent is thinking...";
+            outputCard.style.display = 'block';
+            agentThoughts.style.display = 'block';
+            agentThoughts.innerHTML = '';
+            resultSection.style.display = 'none';
+            resultSection.innerHTML = '';
+
+            try {
+                // Determine base URL dynamically depending on whether it's accessed via direct file or dev server
+                const baseUrl = window.location.origin.includes('localhost') ? window.location.origin : 'http://127.0.0.1:8000';
+                
+                const response = await fetch(`${baseUrl}/api/generate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ topic, tone })
+                });
+                
+                const data = await response.json();
+                
+                // Simulate streaming thoughts
+                if (data.thoughts) {
+                    for(let i=0; i<data.thoughts.length; i++) {
+                        setTimeout(() => {
+                            const p = document.createElement('div');
+                            p.className = 'thought-line';
+                            p.textContent = data.thoughts[i];
+                            agentThoughts.appendChild(p);
+                        }, i * 400); // 400ms delay per thought
+                    }
+                }
+                
+                // Show result after thoughts are done streaming
+                const delay = data.thoughts ? data.thoughts.length * 400 + 200 : 0;
+                
+                setTimeout(() => {
+                    resultSection.style.display = 'flex';
+                    if (data.error) {
+                        resultSection.innerHTML = `
+                            <div class="script-block error">
+                                <h3>Error</h3>
+                                <p>${data.error}</p>
+                            </div>
+                        `;
+                    } else if (data.result) {
+                        resultSection.innerHTML = `
+                            <div class="script-block" style="border-color: #60a5fa;">
+                                <h3 style="color: #60a5fa;">1. The Hook (0-5s)</h3>
+                                <p>${data.result.hook || 'N/A'}</p>
+                            </div>
+                            <div class="script-block" style="border-color: #c084fc;">
+                                <h3 style="color: #c084fc;">2. The Body (5-45s)</h3>
+                                <p>${data.result.body || 'N/A'}</p>
+                            </div>
+                            <div class="script-block" style="border-color: #f472b6;">
+                                <h3 style="color: #f472b6;">3. The Call to Action (45-60s)</h3>
+                                <p>${data.result.cta || 'N/A'}</p>
+                            </div>
+                        `;
+                    }
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "Generate Another Script";
+                }, delay);
+
+            } catch (err) {
+                agentThoughts.innerHTML += `<div class="thought-line" style="color: #ef4444;">Connection error. Is the backend running?</div>`;
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Try Again";
+                console.error(err);
+            }
+        });
+    </script>
+</body>
+</html>
