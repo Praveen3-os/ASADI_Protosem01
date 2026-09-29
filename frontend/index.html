@@ -1,304 +1,317 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reel Script Builder AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #0f172a;
-            --surface: #1e293b;
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #334155;
-            --success: #10b981;
-        }
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 3rem 1rem;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reel Script Builder</title>
+<meta name="description" content="Turn any idea into a structured short-form video script with an AI agent.">
+<link rel="icon" type="image/svg+xml" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=SF+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ─────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-        }
+/* ── Tokens ────────────────────────────────────────── */
+:root{
+  --bg:#f5f5f7;
+  --surface:#fff;
+  --surface-hover:rgba(0,0,0,.03);
+  --border:rgba(0,0,0,.08);
+  --border-active:rgba(0,0,0,.18);
+  --text-primary:#1d1d1f;
+  --text-secondary:#6e6e73;
+  --text-tertiary:#aeaeb2;
+  --accent:#0071e3;
+  --accent-hover:#0077ed;
+  --accent-surface:rgba(0,113,227,.06);
+  --hook-color:#bf5af2;
+  --body-color:#30d158;
+  --cta-color:#ff9f0a;
+  --danger:#ff3b30;
+  --radius:12px;
+  --radius-lg:16px;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.04);
+  --shadow:0 2px 8px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg:0 8px 30px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.04);
+  --font:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,sans-serif;
+  --mono:"SF Mono","Fira Code","Cascadia Code",monospace;
+  --transition:200ms cubic-bezier(.25,.1,.25,1);
+}
 
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
+/* ── Base ──────────────────────────────────────────── */
+html{font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:var(--font);background:var(--bg);color:var(--text-primary);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 1rem}
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(to right, #60a5fa, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+/* ── Layout ────────────────────────────────────────── */
+.shell{width:100%;max-width:680px;padding:4rem 0 6rem}
 
-        p.subtitle {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-        }
+/* ── Header ────────────────────────────────────────── */
+.page-header{text-align:center;margin-bottom:3rem}
+.page-header h1{font-size:2rem;font-weight:600;letter-spacing:-.02em;color:var(--text-primary)}
+.page-header p{margin-top:.5rem;font-size:.9375rem;color:var(--text-secondary);line-height:1.5}
 
-        .card {
-            background: var(--surface);
-            border-radius: 12px;
-            padding: 2rem;
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-            margin-bottom: 2rem;
-        }
+/* ── Card ──────────────────────────────────────────── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;box-shadow:var(--shadow);transition:box-shadow var(--transition)}
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+/* ── Form ──────────────────────────────────────────── */
+.field{margin-bottom:1.25rem}
+.field:last-of-type{margin-bottom:1.5rem}
+.field label{display:block;font-size:.8125rem;font-weight:500;color:var(--text-secondary);margin-bottom:.375rem;letter-spacing:.01em}
+.field input,.field select{
+  width:100%;
+  padding:.625rem .75rem;
+  font-size:.9375rem;
+  font-family:var(--font);
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  color:var(--text-primary);
+  outline:none;
+  transition:border-color var(--transition),box-shadow var(--transition);
+  -webkit-appearance:none;
+}
+.field input::placeholder{color:var(--text-tertiary)}
+.field input:focus,.field select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-surface);
+}
+.field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%236e6e73' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right .75rem center;
+  padding-right:2rem;
+}
 
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--text-muted);
-        }
+/* ── Button ────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  width:100%;
+  padding:.75rem 1.25rem;
+  font-size:.9375rem;font-weight:500;font-family:var(--font);
+  color:#fff;
+  background:var(--accent);
+  border:none;border-radius:var(--radius);
+  cursor:pointer;
+  transition:background var(--transition),transform 80ms,opacity var(--transition);
+}
+.btn:hover{background:var(--accent-hover)}
+.btn:active{transform:scale(.985)}
+.btn:disabled{opacity:.45;cursor:default;transform:none}
 
-        input[type="text"], select {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: var(--bg-color);
-            color: var(--text-main);
-            font-size: 1rem;
-            font-family: inherit;
-        }
-        
-        input[type="text"]:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-        }
+/* ── Spinner inside button ─────────────────────────── */
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:none}
+.btn.loading .spinner{display:block}
+.btn.loading .btn-label{opacity:.7}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-        button {
-            width: 100%;
-            padding: 1rem;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
+/* ── Output ────────────────────────────────────────── */
+.output{margin-top:1.5rem;display:none}
+.output.visible{display:block}
 
-        button:hover {
-            background: var(--primary-hover);
-        }
+/* ── Agent trace ───────────────────────────────────── */
+.trace{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:.75rem 1rem;
+  margin-bottom:1.25rem;
+  font-family:var(--mono);
+  font-size:.75rem;
+  line-height:1.7;
+  color:var(--text-secondary);
+  max-height:180px;
+  overflow-y:auto;
+}
+.trace-line{opacity:0;transform:translateY(4px);animation:trace-in .35s forwards}
+.trace-line::before{content:"\25B8 ";color:var(--accent);font-size:.625rem}
+@keyframes trace-in{to{opacity:1;transform:translateY(0)}}
 
-        button:disabled {
-            background: var(--border);
-            cursor: not-allowed;
-            color: var(--text-muted);
-        }
+/* ── Script blocks ─────────────────────────────────── */
+.script-blocks{display:flex;flex-direction:column;gap:.75rem}
+.script-block{
+  position:relative;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:1.25rem 1rem 1rem 1rem;
+  opacity:0;
+  transform:translateY(8px);
+  animation:block-in .4s forwards;
+}
+.script-block .tag{
+  position:absolute;top:-.5rem;left:.75rem;
+  font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;
+  padding:.125rem .5rem;
+  border-radius:6px;
+  color:#fff;
+  line-height:1.4;
+}
+.script-block .tag.hook{background:var(--hook-color)}
+.script-block .tag.body{background:var(--body-color)}
+.script-block .tag.cta{background:var(--cta-color)}
+.script-block p{font-size:.9375rem;line-height:1.6;color:var(--text-primary)}
+@keyframes block-in{to{opacity:1;transform:translateY(0)}}
 
-        .agent-thoughts {
-            background: rgba(0,0,0,0.2);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            font-family: monospace;
-            color: #cbd5e1;
-            font-size: 0.9rem;
-            display: none;
-        }
+/* ── Error ─────────────────────────────────────────── */
+.error-box{
+  background:rgba(255,59,48,.06);
+  border:1px solid rgba(255,59,48,.15);
+  border-radius:var(--radius);
+  padding:1rem;
+  font-size:.875rem;
+  color:var(--danger);
+  line-height:1.5;
+}
 
-        .thought-line {
-            margin-bottom: 0.3rem;
-            opacity: 0;
-            animation: fadeIn 0.5s forwards;
-        }
+/* ── Footer ────────────────────────────────────────── */
+.page-footer{
+  margin-top:3rem;
+  text-align:center;
+  font-size:.75rem;
+  color:var(--text-tertiary);
+  padding:1.5rem 0;
+  border-top:1px solid var(--border);
+}
+.page-footer a{color:var(--text-secondary);text-decoration:none;transition:color var(--transition)}
+.page-footer a:hover{color:var(--accent)}
 
-        .thought-line::before {
-            content: "> ";
-            color: var(--primary);
-        }
-
-        @keyframes fadeIn { to { opacity: 1; } }
-
-        .result-section {
-            display: none;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .script-block {
-            background: var(--bg-color);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem;
-            position: relative;
-        }
-        
-        .script-block h3 {
-            position: absolute;
-            top: -12px;
-            left: 1.5rem;
-            background: var(--surface);
-            padding: 0 0.5rem;
-            color: var(--primary);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        .script-block.error {
-            border-color: #ef4444;
-        }
-        .script-block.error h3 {
-            color: #ef4444;
-        }
-    </style>
+/* ── Responsive ────────────────────────────────────── */
+@media(max-width:540px){
+  .shell{padding:2rem 0 4rem}
+  .page-header h1{font-size:1.5rem}
+  .card{padding:1.25rem}
+}
+</style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <h1>Reel Script Builder</h1>
-            <p class="subtitle">Turn any idea into a high-converting 60s short-form script</p>
-        </header>
+<div class="shell">
+  <header class="page-header">
+    <h1>Reel Script Builder</h1>
+    <p>Turn any idea into a structured 60-second short-form video script.</p>
+  </header>
 
-        <div class="card">
-            <form id="generateForm">
-                <div class="form-group">
-                    <label for="topic">What is your video about? (Topic/Idea)</label>
-                    <input type="text" id="topic" placeholder="e.g. 3 productivity hacks for software engineers" required autocomplete="off">
-                </div>
-                
-                <div class="form-group">
-                    <label for="tone">Script Tone</label>
-                    <select id="tone">
-                        <option value="engaging">Engaging & Fast-paced</option>
-                        <option value="educational">Educational & Informative</option>
-                        <option value="storytelling">Storytelling & Emotional</option>
-                        <option value="funny">Funny & Entertaining</option>
-                        <option value="controversial">Controversial & Opinionated</option>
-                    </select>
-                </div>
+  <div class="card">
+    <form id="form" autocomplete="off">
+      <div class="field">
+        <label for="topic">Topic</label>
+        <input type="text" id="topic" placeholder="e.g. 3 productivity hacks for developers" required>
+      </div>
+      <div class="field">
+        <label for="tone">Tone</label>
+        <select id="tone">
+          <option value="engaging">Engaging</option>
+          <option value="educational">Educational</option>
+          <option value="storytelling">Storytelling</option>
+          <option value="funny">Funny</option>
+          <option value="controversial">Controversial</option>
+        </select>
+      </div>
+      <button type="submit" class="btn" id="submit">
+        <span class="spinner"></span>
+        <span class="btn-label">Generate Script</span>
+      </button>
+    </form>
 
-                <button type="submit" id="submitBtn">Generate Script</button>
-            </form>
-        </div>
-
-        <div class="card" id="outputCard" style="display: none;">
-            <div class="agent-thoughts" id="agentThoughts"></div>
-            
-            <div class="result-section" id="resultSection">
-                <!-- Template blocks -->
-            </div>
-        </div>
+    <div class="output" id="output">
+      <div class="trace" id="trace"></div>
+      <div class="script-blocks" id="blocks"></div>
     </div>
+  </div>
 
-    <script>
-        const form = document.getElementById('generateForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const outputCard = document.getElementById('outputCard');
-        const agentThoughts = document.getElementById('agentThoughts');
-        const resultSection = document.getElementById('resultSection');
-        const topicInput = document.getElementById('topic');
-        const toneInput = document.getElementById('tone');
+  <footer class="page-footer">
+    PRAVEEN.A &middot; Protosem 05 &middot; <a href="https://github.com/Rishi-ZAiFi/ASADI_Protosem01" target="_blank">ASADI Protosem</a>
+  </footer>
+</div>
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const topic = topicInput.value.trim();
-            const tone = toneInput.value;
-            
-            if(!topic) return;
+<script>
+(function () {
+  const form    = document.getElementById('form');
+  const submit  = document.getElementById('submit');
+  const output  = document.getElementById('output');
+  const trace   = document.getElementById('trace');
+  const blocks  = document.getElementById('blocks');
 
-            // Reset UI
-            submitBtn.disabled = true;
-            submitBtn.textContent = "Agent is thinking...";
-            outputCard.style.display = 'block';
-            agentThoughts.style.display = 'block';
-            agentThoughts.innerHTML = '';
-            resultSection.style.display = 'none';
-            resultSection.innerHTML = '';
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-            try {
-                // Determine base URL dynamically depending on whether it's accessed via direct file or dev server
-                const baseUrl = window.location.origin.includes('localhost') ? window.location.origin : 'http://127.0.0.1:8000';
-                
-                const response = await fetch(`${baseUrl}/api/generate`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ topic, tone })
-                });
-                
-                const data = await response.json();
-                
-                // Simulate streaming thoughts
-                if (data.thoughts) {
-                    for(let i=0; i<data.thoughts.length; i++) {
-                        setTimeout(() => {
-                            const p = document.createElement('div');
-                            p.className = 'thought-line';
-                            p.textContent = data.thoughts[i];
-                            agentThoughts.appendChild(p);
-                        }, i * 400); // 400ms delay per thought
-                    }
-                }
-                
-                // Show result after thoughts are done streaming
-                const delay = data.thoughts ? data.thoughts.length * 400 + 200 : 0;
-                
-                setTimeout(() => {
-                    resultSection.style.display = 'flex';
-                    if (data.error) {
-                        resultSection.innerHTML = `
-                            <div class="script-block error">
-                                <h3>Error</h3>
-                                <p>${data.error}</p>
-                            </div>
-                        `;
-                    } else if (data.result) {
-                        resultSection.innerHTML = `
-                            <div class="script-block" style="border-color: #60a5fa;">
-                                <h3 style="color: #60a5fa;">1. The Hook (0-5s)</h3>
-                                <p>${data.result.hook || 'N/A'}</p>
-                            </div>
-                            <div class="script-block" style="border-color: #c084fc;">
-                                <h3 style="color: #c084fc;">2. The Body (5-45s)</h3>
-                                <p>${data.result.body || 'N/A'}</p>
-                            </div>
-                            <div class="script-block" style="border-color: #f472b6;">
-                                <h3 style="color: #f472b6;">3. The Call to Action (45-60s)</h3>
-                                <p>${data.result.cta || 'N/A'}</p>
-                            </div>
-                        `;
-                    }
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = "Generate Another Script";
-                }, delay);
+    const topic = document.getElementById('topic').value.trim();
+    const tone  = document.getElementById('tone').value;
+    if (!topic) return;
 
-            } catch (err) {
-                agentThoughts.innerHTML += `<div class="thought-line" style="color: #ef4444;">Connection error. Is the backend running?</div>`;
-                submitBtn.disabled = false;
-                submitBtn.textContent = "Try Again";
-                console.error(err);
-            }
-        });
-    </script>
+    // Lock UI
+    submit.disabled = true;
+    submit.classList.add('loading');
+    submit.querySelector('.btn-label').textContent = 'Generating...';
+    output.classList.add('visible');
+    trace.innerHTML = '';
+    blocks.innerHTML = '';
+
+    try {
+      const res  = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic: topic, tone: tone })
+      });
+      const data = await res.json();
+
+      // Stream thoughts into trace
+      if (data.thoughts && data.thoughts.length) {
+        for (let i = 0; i < data.thoughts.length; i++) {
+          await delay(280);
+          var line = document.createElement('div');
+          line.className = 'trace-line';
+          line.style.animationDelay = '0ms';
+          line.textContent = data.thoughts[i];
+          trace.appendChild(line);
+          trace.scrollTop = trace.scrollHeight;
+        }
+      }
+
+      await delay(400);
+
+      // Render result or error
+      if (data.error) {
+        blocks.innerHTML = '<div class="error-box">' + escapeHtml(data.error) + '</div>';
+      } else if (data.result) {
+        var sections = [
+          { tag: 'hook', label: 'Hook  0 - 5 s',   text: data.result.hook },
+          { tag: 'body', label: 'Body  5 - 50 s',  text: data.result.body },
+          { tag: 'cta',  label: 'CTA  50 - 60 s',  text: data.result.cta  },
+        ];
+        for (let i = 0; i < sections.length; i++) {
+          await delay(200);
+          var s = sections[i];
+          var div = document.createElement('div');
+          div.className = 'script-block';
+          div.style.animationDelay = '0ms';
+          div.innerHTML =
+            '<span class="tag ' + s.tag + '">' + escapeHtml(s.label) + '</span>' +
+            '<p>' + escapeHtml(s.text || '(empty)') + '</p>';
+          blocks.appendChild(div);
+        }
+      }
+
+    } catch (err) {
+      blocks.innerHTML = '<div class="error-box">Could not reach the backend. Make sure the server is running on this origin.</div>';
+    }
+
+    // Unlock UI
+    submit.disabled = false;
+    submit.classList.remove('loading');
+    submit.querySelector('.btn-label').textContent = 'Generate Script';
+  });
+
+  function delay(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  function escapeHtml(str) {
+    var d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+})();
+</script>
 </body>
 </html>
