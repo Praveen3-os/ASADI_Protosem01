@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASADI Creator OS - All-in-One AI SaaS Suite for Creators</title>
+  <meta name="description" content="The ultimate AI content operating system for creators, agencies, and media teams. Unifying 24 powerful AI micro-apps in one seamless dashboard.">
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </div>
+        <div class="brand-text">
+          <h2>ASADI Creator OS</h2>
+          <span class="badge-saas">PRO SUITE</span>
+        </div>
+      </div>
+
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="toolSearch" placeholder="Search 24 tools..." onkeyup="filterTools()">
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-category">CORE SYSTEM</div>
+        <a href="#" class="nav-item active" onclick="switchTab('dashboard', this)">
+          <i class="fa-solid fa-chart-pie"></i> Executive Dashboard
+        </a>
+        <a href="#" class="nav-item highlight-btn" onclick="switchTab('autonomous-pipeline', this)">
+          <i class="fa-solid fa-bolt-lightning"></i> Autonomous Pipeline
+        </a>
+
+        <div class="nav-category">IDEATION & STRATEGY</div>
+        <a href="#" class="nav-item" onclick="switchTab('generate-ideas', this)" data-name="Content Idea Generator">
+          <i class="fa-solid fa-lightbulb"></i> Content Idea Generator
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('daily-planner', this)" data-name="Daily Content Planner">
+          <i class="fa-solid fa-calendar-days"></i> Daily Content Planner
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('recycle-content', this)" data-name="Content Recycler">
+          <i class="fa-solid fa-rotate"></i> Content Recycler
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('creative-producer', this)" data-name="AI Creative Producer">
+          <i class="fa-solid fa-chess-knight"></i> AI Creative Producer
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('content-director', this)" data-name="AI Content Director">
+          <i class="fa-solid fa-bullseye"></i> AI Content Director
+        </a>
+
+        <div class="nav-category">SCRIPTING & COPYWRITING</div>
+        <a href="#" class="nav-item" onclick="switchTab('reel-script', this)" data-name="Reel Script Builder">
+          <i class="fa-solid fa-video"></i> Reel Script Builder
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('screenplay', this)" data-name="AI Screenplay Workspace">
+          <i class="fa-solid fa-scroll"></i> AI Screenplay Workspace
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('generate-hooks', this)" data-name="Hook Generator">
+          <i class="fa-solid fa-anchor"></i> Hook Generator
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('caption-assistant', this)" data-name="Caption Assistant">
+          <i class="fa-solid fa-pen-nib"></i> Caption Assistant
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('voice-replicator', this)" data-name="Voice Replicator">
+          <i class="fa-solid fa-headset"></i> Voice Replicator
+        </a>
+
+        <div class="nav-category">MEDIA & CLIPS</div>
+        <a href="#" class="nav-item" onclick="switchTab('repurpose', this)" data-name="Content Repurposer">
+          <i class="fa-solid fa-arrows-split-up-and-left"></i> Content Repurposer
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('find-clips', this)" data-name="Clip Finder">
+          <i class="fa-solid fa-scissors"></i> Clip Finder
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('thumbnail-ideas', this)" data-name="Thumbnail Ideator">
+          <i class="fa-solid fa-image"></i> Thumbnail Ideator
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('podcast-assistant', this)" data-name="Podcast Assistant">
+          <i class="fa-solid fa-microphone"></i> Podcast Assistant
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('cta-generator', this)" data-name="CTA Generator">
+          <i class="fa-solid fa-bullhorn"></i> CTA Generator
+        </a>
+
+        <div class="nav-category">AUDIENCE & RESEARCH</div>
+        <a href="#" class="nav-item" onclick="switchTab('analyze-comments', this)" data-name="Comment Analyzer">
+          <i class="fa-solid fa-comments"></i> Comment Analyzer
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('comment-to-content', this)" data-name="Comment-to-Content">
+          <i class="fa-solid fa-comment-dots"></i> Comment-to-Content
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('research-assistant', this)" data-name="Creator Research Assistant">
+          <i class="fa-solid fa-microscope"></i> Creator Research Assistant
+        </a>
+
+        <div class="nav-category">BUSINESS & WORKSPACE</div>
+        <a href="#" class="nav-item" onclick="switchTab('workspace', this)" data-name="Creator Workspace (Kanban)">
+          <i class="fa-solid fa-layer-group"></i> Creator Workspace (Kanban)
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('brand-pitch', this)" data-name="Brand Pitch Builder">
+          <i class="fa-solid fa-handshake"></i> Brand Pitch Builder
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('second-brain', this)" data-name="Creator Second Brain">
+          <i class="fa-solid fa-brain"></i> Creator Second Brain
+        </a>
+        <a href="#" class="nav-item" onclick="switchTab('collaboration-finder', this)" data-name="Collaboration Finder">
+          <i class="fa-solid fa-users-viewfinder"></i> Collaboration Finder
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="api-key-btn" onclick="openApiKeyModal()">
+          <i class="fa-solid fa-key"></i> API Key Settings
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Body -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="top-header">
+        <div class="header-title">
+          <h1 id="pageTitle">Executive Dashboard</h1>
+          <p id="pageSubtitle">Complete overview of your content engine and AI micro-apps.</p>
+        </div>
+
+        <div class="header-actions">
+          <span class="status-indicator">
+            <span class="pulse-dot"></span> System Live (24 Tools Ready)
+          </span>
+          <button class="btn btn-primary" onclick="switchTab('autonomous-pipeline')">
+            <i class="fa-solid fa-play"></i> Run Auto Pipeline
+          </button>
+        </div>
+      </header>
+
+      <!-- Dynamic Views Container -->
+      <div class="content-body">
+
+        <!-- DASHBOARD VIEW -->
+        <section id="view-dashboard" class="tab-view active">
+          <div class="dashboard-banner">
+            <div class="banner-content">
+              <h2>Welcome to ASADI Creator OS 🚀</h2>
+              <p>Your unified SaaS workspace bringing together all 24 AI content creation micro-applications. Scale your reach, automate repurposing, and run autonomous content pipelines.</p>
+              <div class="banner-buttons">
+                <button class="btn btn-glow" onclick="switchTab('autonomous-pipeline')"><i class="fa-solid fa-bolt"></i> Launch 7-Step Auto Pipeline</button>
+                <button class="btn btn-secondary" onclick="switchTab('workspace')"><i class="fa-solid fa-kanban"></i> Open Content Workspace</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-icon purple"><i class="fa-solid fa-cubes"></i></div>
+              <div class="metric-info">
+                <h3>24 / 24</h3>
+                <p>AI Tools Active</p>
+              </div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon cyan"><i class="fa-solid fa-rocket"></i></div>
+              <div class="metric-info">
+                <h3>Autonomous</h3>
+                <p>Pipeline Engine</p>
+              </div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon emerald"><i class="fa-solid fa-chart-line"></i></div>
+              <div class="metric-info">
+                <h3>10x Output</h3>
+                <p>Efficiency Multiplier</p>
+              </div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon amber"><i class="fa-solid fa-shield-halved"></i></div>
+              <div class="metric-info">
+                <h3>Gemini AI</h3>
+                <p>Model Gateway Ready</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title-row">
+            <h3>Quick Tool Hub (24 Applications)</h3>
+          </div>
+
+          <div class="tools-grid" id="toolsGrid">
+            <!-- Dynamically populated tool cards -->
+          </div>
+        </section>
+
+        <!-- AUTONOMOUS PIPELINE VIEW -->
+        <section id="view-autonomous-pipeline" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-bolt-lightning text-accent"></i> Autonomous 7-Step Content Pipeline</h3>
+            <p class="card-desc">Enter 1 seed idea. The autonomous engine will simultaneously execute research, full script writing, short clips creation, X thread generation, LinkedIn post, caption formatting, and distribution calendar.</p>
+            
+            <div class="form-group">
+              <label>Seed Content Idea / Core Concept:</label>
+              <input type="text" id="autoSeedIdea" class="form-control" placeholder="e.g. How AI tools will reshape software engineering in 2026">
+            </div>
+
+            <button class="btn btn-primary btn-block" onclick="runAutonomousPipeline()">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Execute 7-Step Autonomous Pipeline
+            </button>
+          </div>
+
+          <div id="pipelineOutput" class="output-container hidden">
+            <!-- Output generated here -->
+          </div>
+        </section>
+
+        <!-- CONTENT IDEA GENERATOR -->
+        <section id="view-generate-ideas" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-lightbulb text-amber"></i> Content Idea Generator</h3>
+            <div class="form-row">
+              <div class="form-group col">
+                <label>Niche / Topic:</label>
+                <input type="text" id="ideaTopic" class="form-control" placeholder="e.g. AI Productivity, SaaS Marketing, Fitness">
+              </div>
+              <div class="form-group col">
+                <label>Target Audience:</label>
+                <input type="text" id="ideaAudience" class="form-control" placeholder="e.g. Tech Founders, Busy Professionals">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <label>Platform:</label>
+                <select id="ideaPlatform" class="form-control">
+                  <option value="YouTube">YouTube</option>
+                  <option value="Instagram">Instagram Reels</option>
+                  <option value="Twitter/X">Twitter / X</option>
+                  <option value="LinkedIn">LinkedIn</option>
+                </select>
+              </div>
+              <div class="form-group col">
+                <label>Count:</label>
+                <input type="number" id="ideaCount" class="form-control" value="5" min="1" max="10">
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="runIdeaGenerator()"><i class="fa-solid fa-sparkles"></i> Generate Ideas</button>
+          </div>
+          <div id="ideaOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- REEL SCRIPT BUILDER -->
+        <section id="view-reel-script" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-video text-cyan"></i> Short-Form Reel Script Builder</h3>
+            <div class="form-group">
+              <label>Reel Topic or Concept:</label>
+              <input type="text" id="reelTopic" class="form-control" placeholder="e.g. 3 AI chrome extensions that feel illegal to know">
+            </div>
+            <div class="form-group">
+              <label>Target Duration:</label>
+              <select id="reelDuration" class="form-control">
+                <option value="30s">30 Seconds (Fast Paced)</option>
+                <option value="45s">45 Seconds (Standard)</option>
+                <option value="60s">60 Seconds (Deep Breakdown)</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" onclick="runReelScript()"><i class="fa-solid fa-file-pen"></i> Generate Reel Script</button>
+          </div>
+          <div id="reelOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- CONTENT REPURPOSER -->
+        <section id="view-repurpose" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-arrows-split-up-and-left text-purple"></i> Multi-Platform Content Repurposer</h3>
+            <div class="form-group">
+              <label>Original Core Content (Blog, Video Transcript, or Concept):</label>
+              <textarea id="repurposeInput" class="form-control textarea" placeholder="Paste your core article or transcript here..."></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="runRepurposer()"><i class="fa-solid fa-share-nodes"></i> Repurpose Across All Platforms</button>
+          </div>
+          <div id="repurposeOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- HOOK GENERATOR -->
+        <section id="view-generate-hooks" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-anchor text-amber"></i> High-Converting Hook Generator</h3>
+            <div class="form-row">
+              <div class="form-group col">
+                <label>Topic / Niche:</label>
+                <input type="text" id="hookTopic" class="form-control" placeholder="e.g. Solopreneurship, Coding, Finance">
+              </div>
+              <div class="form-group col">
+                <label>Tone Style:</label>
+                <select id="hookTone" class="form-control">
+                  <option value="Curiosity">Curiosity Gap</option>
+                  <option value="Contrarian">Contrarian / Unpopular Opinion</option>
+                  <option value="Data-Driven">Data-Driven / Statistical</option>
+                  <option value="Urgent">Urgent / FOMO</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="runHookGenerator()"><i class="fa-solid fa-bolt"></i> Generate Viral Hooks</button>
+          </div>
+          <div id="hookOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- DAILY CONTENT PLANNER -->
+        <section id="view-daily-planner" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-calendar-days text-emerald"></i> Daily Content Planner & Schedule</h3>
+            <div class="form-row">
+              <div class="form-group col">
+                <label>Creator Niche:</label>
+                <input type="text" id="plannerNiche" class="form-control" placeholder="e.g. AI Tech, Fitness Coach, Finance">
+              </div>
+              <div class="form-group col">
+                <label>Primary Goal:</label>
+                <input type="text" id="plannerGoal" class="form-control" placeholder="e.g. Drive newsletter signups, Gain 1000 followers">
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="runDailyPlanner()"><i class="fa-solid fa-calendar-check"></i> Generate 7-Day Plan</button>
+          </div>
+          <div id="plannerOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- CLIP FINDER -->
+        <section id="view-find-clips" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-scissors text-purple"></i> Long-Form Video Clip Finder</h3>
+            <div class="form-group">
+              <label>Long-Form Video Transcript or Speech Notes:</label>
+              <textarea id="clipTranscript" class="form-control textarea" placeholder="Paste full transcript with or without timestamps..."></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="runClipFinder()"><i class="fa-solid fa-magnifying-glass-chart"></i> Find Viral Clips</button>
+          </div>
+          <div id="clipOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- THUMBNAIL IDEATOR -->
+        <section id="view-thumbnail-ideas" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-image text-cyan"></i> Thumbnail Ideator & Prompt Generator</h3>
+            <div class="form-group">
+              <label>Video Title:</label>
+              <input type="text" id="thumbTitle" class="form-control" placeholder="e.g. I Built an AI Agent in 24 Hours">
+            </div>
+            <button class="btn btn-primary" onclick="runThumbnailIdeator()"><i class="fa-solid fa-palette"></i> Generate Thumbnail Concepts</button>
+          </div>
+          <div id="thumbOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- CAPTION ASSISTANT -->
+        <section id="view-caption-assistant" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-pen-nib text-amber"></i> Caption Assistant</h3>
+            <div class="form-group">
+              <label>Content Summary or Image Description:</label>
+              <input type="text" id="captionInput" class="form-control" placeholder="e.g. Photo of behind-the-scenes recording setup with neon lights">
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <label>Platform:</label>
+                <select id="captionPlatform" class="form-control">
+                  <option value="Instagram">Instagram</option>
+                  <option value="LinkedIn">LinkedIn</option>
+                  <option value="TikTok">TikTok</option>
+                  <option value="YouTube Shorts">YouTube Shorts</option>
+                </select>
+              </div>
+              <div class="form-group col">
+                <label>Tone:</label>
+                <input type="text" id="captionTone" class="form-control" value="Engaging & Inspiring">
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="runCaptionAssistant()"><i class="fa-solid fa-font"></i> Generate Caption</button>
+          </div>
+          <div id="captionOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- CTA GENERATOR -->
+        <section id="view-cta-generator" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-bullhorn text-emerald"></i> CTA (Call-To-Action) Generator</h3>
+            <div class="form-row">
+              <div class="form-group col">
+                <label>Call-To-Action Goal:</label>
+                <select id="ctaGoal" class="form-control">
+                  <option value="Lead Magnet / Freebie">Lead Magnet / Free Download</option>
+                  <option value="Follow / Subscribe">Follow / Subscribe</option>
+                  <option value="Comment Engagement">Comment Engagement Trigger</option>
+                  <option value="Product Sale / Trial">Product Sale / Free Trial</option>
+                </select>
+              </div>
+              <div class="form-group col">
+                <label>Target Platform:</label>
+                <input type="text" id="ctaPlatform" class="form-control" value="Instagram Reels & YouTube">
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="runCtaGenerator()"><i class="fa-solid fa-bullhorn"></i> Generate High-Converting CTAs</button>
+          </div>
+          <div id="ctaOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- COMMENT ANALYZER -->
+        <section id="view-analyze-comments" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-comments text-cyan"></i> Audience Comment Sentiment Analyzer</h3>
+            <div class="form-group">
+              <label>Paste Audience Comments (One per line or paragraph):</label>
+              <textarea id="commentText" class="form-control textarea" placeholder="Paste comments from YouTube, Instagram, or Twitter here..."></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="runCommentAnalyzer()"><i class="fa-solid fa-chart-pie"></i> Analyze Audience Insights</button>
+          </div>
+          <div id="commentOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- COMMENT-TO-CONTENT -->
+        <section id="view-comment-to-content" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-comment-dots text-purple"></i> Comment-to-Content Transformer</h3>
+            <div class="form-group">
+              <label>Top Audience Comment or Question:</label>
+              <input type="text" id="commentQuery" class="form-control" placeholder="e.g. Can you do a tutorial on setting up automated email flows for creators?">
+            </div>
+            <button class="btn btn-primary" onclick="runCommentToContent()"><i class="fa-solid fa-wand-magic"></i> Transform Comment to Content</button>
+          </div>
+          <div id="commentContentOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- CREATOR RESEARCH ASSISTANT -->
+        <section id="view-research-assistant" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-microscope text-amber"></i> Creator Research Assistant</h3>
+            <div class="form-group">
+              <label>Research Topic / Niche Keyword:</label>
+              <input type="text" id="researchTopic" class="form-control" placeholder="e.g. AI-assisted video editing trends 2026">
+            </div>
+            <button class="btn btn-primary" onclick="runResearchAssistant()"><i class="fa-solid fa-magnifying-glass"></i> Perform Deep Research</button>
+          </div>
+          <div id="researchOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- VOICE REPLICATOR -->
+        <section id="view-voice-replicator" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-headset text-emerald"></i> Voice & Style Replicator</h3>
+            <div class="form-group">
+              <label>Sample of Your Previous High-Performing Writing:</label>
+              <textarea id="voiceSample" class="form-control textarea" placeholder="Paste 1-2 past posts that represent your unique writing style..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>New Topic to Draft:</label>
+              <input type="text" id="voiceTopic" class="form-control" placeholder="e.g. Why solopreneurs will win in 2026">
+            </div>
+            <button class="btn btn-primary" onclick="runVoiceReplicator()"><i class="fa-solid fa-clone"></i> Replicate Voice & Clone Style</button>
+          </div>
+          <div id="voiceOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- PODCAST ASSISTANT -->
+        <section id="view-podcast-assistant" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-microphone text-purple"></i> Podcast Assistant</h3>
+            <div class="form-group">
+              <label>Episode Notes or Audio Transcript:</label>
+              <textarea id="podcastNotes" class="form-control textarea" placeholder="Paste podcast outline or transcript..."></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="runPodcastAssistant()"><i class="fa-solid fa-sliders"></i> Generate Show Notes & Chapters</button>
+          </div>
+          <div id="podcastOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- CREATOR WORKSPACE (KANBAN) -->
+        <section id="view-workspace" class="tab-view">
+          <div class="workspace-header">
+            <h3><i class="fa-solid fa-layer-group text-cyan"></i> Creator Content Workspace & Pipeline</h3>
+            <button class="btn btn-primary" onclick="openNewCardModal()"><i class="fa-solid fa-plus"></i> Add New Content Card</button>
+          </div>
+
+          <div class="kanban-board">
+            <div class="kanban-column" id="col-idea">
+              <div class="column-header">
+                <h4><i class="fa-solid fa-lightbulb"></i> Ideas <span class="badge" id="count-idea">0</span></h4>
+              </div>
+              <div class="column-cards" id="cards-idea"></div>
+            </div>
+
+            <div class="kanban-column" id="col-scripting">
+              <div class="column-header">
+                <h4><i class="fa-solid fa-pen-to-square"></i> Scripting <span class="badge" id="count-scripting">0</span></h4>
+              </div>
+              <div class="column-cards" id="cards-scripting"></div>
+            </div>
+
+            <div class="kanban-column" id="col-review">
+              <div class="column-header">
+                <h4><i class="fa-solid fa-eye"></i> Review & Editing <span class="badge" id="count-review">0</span></h4>
+              </div>
+              <div class="column-cards" id="cards-review"></div>
+            </div>
+
+            <div class="kanban-column" id="col-published">
+              <div class="column-header">
+                <h4><i class="fa-solid fa-circle-check"></i> Published <span class="badge" id="count-published">0</span></h4>
+              </div>
+              <div class="column-cards" id="cards-published"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONTENT RECYCLER -->
+        <section id="view-recycle-content" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-rotate text-emerald"></i> Content Recycler & Evergreen Rotator</h3>
+            <div class="form-group">
+              <label>Past Top-Performing Post Content:</label>
+              <textarea id="recycleInput" class="form-control textarea" placeholder="Paste old post or thread here..."></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="runContentRecycler()"><i class="fa-solid fa-recycle"></i> Recycle & Rework Post</button>
+          </div>
+          <div id="recycleOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- BRAND PITCH BUILDER -->
+        <section id="view-brand-pitch" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-handshake text-amber"></i> Brand Pitch Builder</h3>
+            <div class="form-row">
+              <div class="form-group col">
+                <label>Your Niche:</label>
+                <input type="text" id="pitchNiche" class="form-control" placeholder="e.g. Tech Reviews, AI Tools">
+              </div>
+              <div class="form-group col">
+                <label>Audience Size:</label>
+                <input type="text" id="pitchAudience" class="form-control" placeholder="e.g. 25,000 Followers">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <label>Target Brand Name:</label>
+                <input type="text" id="pitchBrand" class="form-control" placeholder="e.g. Notion, Canva, ElevenLabs">
+              </div>
+              <div class="form-group col">
+                <label>Sponsorship Goal:</label>
+                <input type="text" id="pitchGoal" class="form-control" placeholder="e.g. Dedicated video integration">
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="runBrandPitch()"><i class="fa-solid fa-paper-plane"></i> Build Pitch Proposal</button>
+          </div>
+          <div id="pitchOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- AI CONTENT DIRECTOR -->
+        <section id="view-content-director" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-bullseye text-purple"></i> AI Content Director</h3>
+            <div class="form-row">
+              <div class="form-group col">
+                <label>Channel Strategy Goal:</label>
+                <input type="text" id="directorGoal" class="form-control" placeholder="e.g. Reach 100k subscribers in 90 days">
+              </div>
+              <div class="form-group col">
+                <label>Monthly Core Theme:</label>
+                <input type="text" id="directorTheme" class="form-control" placeholder="e.g. Masterclass in Solopreneur Automation">
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="runContentDirector()"><i class="fa-solid fa-sitemap"></i> Build Executive Strategy Masterplan</button>
+          </div>
+          <div id="directorOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- CREATOR SECOND BRAIN -->
+        <section id="view-second-brain" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-brain text-cyan"></i> Creator Second Brain & Knowledge Vault</h3>
+            <div class="form-row">
+              <div class="form-group col">
+                <label>Topic / Concept Name:</label>
+                <input type="text" id="sbTopic" class="form-control" placeholder="e.g. Short-Form Video Retention">
+              </div>
+              <div class="form-group col">
+                <label>Note / Insight Content:</label>
+                <input type="text" id="sbNote" class="form-control" placeholder="e.g. Cutting dead air every 3 seconds increases average view duration by 40%.">
+              </div>
+            </div>
+            <button class="btn btn-secondary mb-3" onclick="saveSecondBrainNote()"><i class="fa-solid fa-bookmark"></i> Save Note to Vault</button>
+
+            <hr style="border-color: rgba(255,255,255,0.08); margin: 20px 0;">
+
+            <h4><i class="fa-solid fa-magnifying-glass"></i> Semantic Query Engine</h4>
+            <div class="form-group mt-2">
+              <label>Ask your Second Brain a question:</label>
+              <input type="text" id="sbQuery" class="form-control" placeholder="e.g. What have I recorded about retention or hooks?">
+            </div>
+            <button class="btn btn-primary" onclick="querySecondBrain()"><i class="fa-solid fa-comments"></i> Query Knowledge Store</button>
+          </div>
+          <div id="sbOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- AI SCREENPLAY WORKSPACE -->
+        <section id="view-screenplay" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-scroll text-amber"></i> AI Screenplay Workspace</h3>
+            <div class="form-group">
+              <label>Scene Concept or Script Premise:</label>
+              <input type="text" id="scriptConcept" class="form-control" placeholder="e.g. Dramatic confrontation between a traditional marketer and an AI specialist">
+            </div>
+            <button class="btn btn-primary" onclick="runScreenplay()"><i class="fa-solid fa-film"></i> Write Screenplay Scene</button>
+          </div>
+          <div id="screenplayOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- AI CREATIVE PRODUCER -->
+        <section id="view-creative-producer" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-chess-knight text-emerald"></i> AI Creative Producer</h3>
+            <div class="form-row">
+              <div class="form-group col">
+                <label>Production Goal:</label>
+                <input type="text" id="producerGoal" class="form-control" placeholder="e.g. Produce 30 high-converting video assets in 1 month">
+              </div>
+              <div class="form-group col">
+                <label>Estimated Budget:</label>
+                <input type="text" id="producerBudget" class="form-control" value="$500">
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="runCreativeProducer()"><i class="fa-solid fa-diagram-project"></i> Generate Production Blueprint</button>
+          </div>
+          <div id="producerOutput" class="output-container hidden"></div>
+        </section>
+
+        <!-- COLLABORATION FINDER -->
+        <section id="view-collaboration-finder" class="tab-view">
+          <div class="card glass-card">
+            <h3><i class="fa-solid fa-users-viewfinder text-purple"></i> Creator Collaboration Finder</h3>
+            <div class="form-row">
+              <div class="form-group col">
+                <label>Your Niche:</label>
+                <input type="text" id="collabNiche" class="form-control" placeholder="e.g. AI Coding Tools, Web Dev">
+              </div>
+              <div class="form-group col">
+                <label>Subscriber / Follower Tier:</label>
+                <input type="text" id="collabSubs" class="form-control" value="10,000">
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="runCollaborationFinder()"><i class="fa-solid fa-handshake-angle"></i> Find Collaboration Matches</button>
+          </div>
+          <div id="collabOutput" class="output-container hidden"></div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- API Key Modal -->
+  <div class="modal-backdrop hidden" id="apiKeyModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-key"></i> API Key Settings</h3>
+        <button class="modal-close" onclick="closeApiKeyModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Enter your optional <strong>Google Gemini API Key</strong> to connect real-time AI models (`gemini-1.5-flash`). If left empty, Creator OS uses the built-in smart AI synthesis engine!</p>
+        <div class="form-group mt-3">
+          <label>Gemini API Key:</label>
+          <input type="password" id="apiKeyInput" class="form-control" placeholder="AIzaSy...">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeApiKeyModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveApiKey()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
